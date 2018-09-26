@@ -1,0 +1,369 @@
+<!-- 
+Student name: Mengyuan Shang
+Github username: mshang1
+Repository url: https://github.com/mshang1/ten-javascript-algos
+File url: https://github.com/mshang1/ten-javascript-algos/javascript-algos.html
+
+-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<h3>
+    Messages App
+    <button onclick="clearMessages()" class = "btn btn-warning">
+        Clear Messages
+    </button>
+</h3>
+<div>
+    <!-- TODO ADD AN ATTRIBUTE THAT focuses the CURSOR INTO THE TEXTAREA ELEMENT WHEN THE PAGE LOADS -->
+    <textarea 
+        autofocus
+        rows=6 
+        cols=55 
+        id="inputText" 
+        type="text"
+        style="margin-bottom: 15px;"> 
+    </textarea>
+	<button onclick="addPlainMessage()">
+        Enter
+    </button>
+</div>
+
+<script>
+    function clearNames() {
+        var rootDiv = document.getElementById('listContainer');
+        if (rootDiv) {
+            while (rootDiv.hasChildNodes()) {
+                rootDiv.removeChild(rootDiv.lastChild);
+            }
+        }
+    }
+    
+    function initDocument() {
+        clearNames();
+        initUsersNames();
+        initMessages();
+        initConstantTimeNameFileter(); // initiate list for handles
+    }
+    
+    function initUsersNames() {
+        var rootDiv = document.createElement('div');
+        rootDiv.id = 'listContainer';
+        var userNamesContainer = document.createElement('div');
+        userNames.forEach( function(userName, index) {
+            var childDiv = document.createElement('div');
+            var text = document.createTextNode(index.toString().concat(' .) ').concat(`${userName.firstName} ${userName.lastName}`));
+            childDiv.appendChild(text);
+            userNamesContainer.appendChild(childDiv);
+        });
+        rootDiv.appendChild(userNamesContainer);
+        document.body.appendChild(rootDiv);
+    }
+    
+    function initMessages() {
+        var rootDiv = document.createElement('div');
+        var messagesContainer = document.createElement('div');
+        messagesContainer.id = 'messagesContainer';
+        messagesContainer.style['float'] = 'left';
+        document.body.appendChild(messagesContainer);
+    }
+    
+    function clearMessages() {
+        /*TODO CLEAR MESSAGES FROM DOCUMENT WHEN USER CLICKS THE [CLEAR MESSAGES] BUTTON */
+        /* EXTRA CREDIT INCLUDE A SCRIPT TAG THATS FETCHES BOOTSTRAP CSS STLYINGS AND STYLE THE BUTTONS */
+    
+    	var messagesContainer = document.getElementById('messagesContainer');
+        if (messagesContainer) {
+            while (messagesContainer.hasChildNodes()) {
+                messagesContainer.removeChild(messagesContainer.lastChild);
+            }
+        }
+        document.body.appendChild(messagesContainer);
+        
+    	clearUserInput();
+    	
+    	document.getElementById("inputText").placeholder = "enter text here or search by using @";
+        
+    }
+    
+    function addPlainMessage() {
+        const userText = getUserText();
+        var messagesContainer = document.getElementById('messagesContainer');
+        var messageDiv = document.createElement('p');
+        const text = document.createTextNode(userText);
+        messageDiv.appendChild(text);
+        messagesContainer.appendChild(messageDiv);
+        clearUserInput();
+    }
+    
+    function addHandleMessage(handle) {
+    	console.log(handle);
+        var messagesContainer = document.getElementById('messagesContainer');
+        var messageDiv = document.createElement('p');
+        var handleSpan = document.createElement('span');
+        handleSpan.style['color'] = 'dodgerblue';
+        //handleText = document.createTextNode('');
+        handleText = document.createTextNode(handle);
+        handleSpan.appendChild(handleText);
+        // TODO:: EXCLUDING THE ORIGINALLY TYPED USER NAME REPLACE THIS TEXT \
+        //        WITH ANY ADDITIONAL USER TEXT FROM THE ORIGIN USER TEXT MESSAGE
+        //var dummyText = '';
+        var dummyText = ' '.concat(getUserText().split(/ (.*)/)[1]);
+        var messageText = document.createTextNode(`${dummyText} `);
+        
+        messageDiv.appendChild(handleSpan);
+        messageDiv.appendChild(messageText);
+        messagesContainer.appendChild(messageDiv);
+        clearFilteredNames();
+        clearUserInput();
+    }
+    
+    //TODO SET THE FLAG TO FALS ONCE YOU UNDERSTAND THE ASSIGNMENT
+    const instructionsFlag = false;
+    if (instructionsFlag) {
+        console.log(`README`);
+        console.log(`
+            SETUP ->
+            1. INSTALL LODASH USING NPM AND SAVE THE DEPENDENCY TO YOUR PACKAGE.JSON FILE
+    
+            2. IMPORT LODASH INTO THE INDEX.JS FILE.
+    
+            3. COMPLETE ALL TODOS
+        `);
+    }
+    
+    /* TODO ADD ADDITONALY 
+       OBJECTS LIKE THE ONES BELOW, MINIMUM OF TEN.  
+       EACH MUST CONTAIN A FIRST AND LAST NAME AND HANDLE */
+    const userNames = [
+        {
+            firstName: 'Chandler',
+            lastName: 'Gegg',
+            handle: '@CGegg'
+        },
+        {
+            firstName: 'Phil',
+            lastName: 'Mickelson',
+            handle: '@PMickelson'
+        },
+        {
+            firstName: 'Grace',
+            lastName: 'Hopper',
+            handle: '@GHopper'
+        },
+        {
+            firstName: 'Horace',
+            lastName: 'Grant',
+            handle: '@HGrant'
+        },
+        {
+        	firstName: 'Stan',
+        	lastName: 'Lee',
+        	handle:'@SLee'
+        },
+        {
+        	firstName: 'Peter',
+        	lastName: 'Parker',
+        	handle:'@PParker'
+        },
+        {
+        	firstName: 'Bruce',
+        	lastName: 'Banner',
+        	handle:'@BBanner'
+        },
+        {
+        	firstName: 'Steve',
+        	lastName: 'Rogers',
+        	handle:'@SRogers'
+        },
+        {
+        	firstName: 'Tony',
+        	lastName: 'Stark',
+        	handle:'@TStark'
+        },
+        {
+        	firstName: 'Clark',
+        	lastName: 'Kent',
+        	handle:'@CKent'
+        },
+        {
+        	firstName: 'Bruce',
+        	lastName: 'Wayne',
+        	handle:'@BWayne'
+        },
+        {
+        	firstName: 'Billy',
+        	lastName: 'Batson',
+        	handle:'@BBatson'
+        },
+        {
+        	firstName: 'Barry',
+        	lastName: 'Allen',
+        	handle:'@BAllen'
+        },        
+        {
+        	firstName: 'Reed',
+        	lastName: 'Richard',
+        	handle:'@RRichard'
+        }
+        
+    ];
+    
+    const userMessages = [];
+    const debounce = (func, delay) => {
+        let inDebounce
+        return function() {
+            const context = this
+            const args = arguments
+            clearTimeout(inDebounce)
+            inDebounce = setTimeout(() => func.apply(context, args), delay)
+        }
+    }
+    
+    function initConstantTimeNameFileter() {
+        /* EXTRA CREDIT */
+        console.log("Initiating...");
+       var myMap = new Map();
+        
+		userNames.forEach( (userName) => {
+			for (i=0;i<userName.firstName-2;i++) {
+				myMap.set(userName.firstName.toLowerCase().slice(i,i+3), userName.handle);			
+			}
+			
+			for (i=0;i<userName.lastName-2;i++) {
+				myMap.set(userName.lastName.toLowerCase().slice(i,i+3), userName.handle)
+			}
+		});
+        
+        console.log("Finished initating");
+        return myMap;
+    }
+    
+    function constantTimeNameFilter(userText) {
+        /* EXTRA CREDIT :: CONVERT filterNames FUNCTION TO DO CONSTANT TIME LOOK UP.  
+        THIS WILL REQUIRE initConstantTimeNameFileter ON PAGE LOAD AS WELL */
+        const firstThreeChars = userText.toLowerCase().slice(1,4);
+        var re = new RegExp(firstThreeChars, 'g');
+        console.log(`First three characters: ${firstThreeChars} `);
+        const filteredNames = [];
+		
+		filteredNames.push(initConstantTimeNameFileter().get(re));
+		
+        return filteredNames;
+
+    }
+    
+    function filterNames(userText) {
+        const firstThreeChars = userText.toLowerCase().slice(1,4);
+        var re = new RegExp(firstThreeChars, 'g');
+        console.log(`First three characters: ${firstThreeChars} `);
+        console.log(`First three characters: ${firstThreeChars} `);
+        const filteredNames = [];
+        userNames.forEach( (userName) => {
+            const fullname = `${userName.firstName.toLowerCase()} ${userName.lastName.toLowerCase()}`;
+            var isMatch = !!userName.firstName.toLowerCase().match(re) || !!userName.lastName.toLowerCase().match(re);
+            console.log(`Fullname: ${fullname}` );
+            console.log(isMatch);
+            console.log(`Fullname: ${fullname}` );
+            if (isMatch) {
+                filteredNames.push(userName);
+            }
+        });
+        return filteredNames;
+    }
+    
+    function initFilteredNames(filteredNames) {
+        clearNames();
+        var rootDiv = document.createElement('div');
+        rootDiv.id = 'filteredNamesContainer';
+        var namesContainer = document.createElement('div');
+        filteredNames.forEach( (name) => {
+        	console.log(getUserText());
+            var nameElm = document.createElement('button');
+            nameElm.style['background-color'] = 'dodgerblue';
+            nameElm.style['cursor'] = 'pointer';
+            nameElm.setAttribute('class', 'filtered-name');
+            var text = document.createTextNode(`${name.firstName} ${name.lastName}`);
+            nameElm.appendChild(text);
+            namesContainer.appendChild(nameElm);
+            
+            nameElm.onclick = function() {nameElm.addEventListener("click", addHandleMessage(name.handle));};
+            /* 
+                TODO :: ADD CLICK EVENT LISTENER [addEventListener] TO EACH NAME ELEMENT.
+                IF THE USER CLICKS ON A FILTERED NAME THEN THEN A MESSAGE IS OUTPUT
+                USING THE ADD MESSAGE FUNCTION THAT REPLACES THE USER name WITH THE USER HANDLE.
+                THE addHandleMessage FUNCTION SHOULD BE INVOKED FROM INSIDE THE CALLBACK OF THE EVENT LISTENER.
+                TIPS:
+                    BRUTE FORCE :: ASIGN A UNIQUE ID TO EACH NAME ELEMENT, GRAB ID FROM THE EVENT AND
+                                   PASS IT AS AN ARGUMENT TO ADD MESSAGE FUNCTION THEN SEARCH USER NAMES ARRAY
+                    
+                    DATA ATTRIBUTE :: ASSIGN A DATA ATTRIBUTE CALLED [handle] TO EACH THE NAME ELEMENT
+                                      GRAB DATA ATTRIBUTE FROM THE EVENT AND PASS IT AS AN ARGUMENT TO 
+                                      ADD MESSAGE FUNCTION THEN SEARCH USER NAMES ARRAY
+                EXAMPLE: @chandler => @CGegg
+            */
+            //TODO WRAP THIS FUNCTION WITH EVENT LISTENER AND UNCOMMENT IT
+            //TODO REPLACE [myHandle] WITH THE USERS CORRECT HANDLE
+            // addHandleMessage('myHandle'); 
+       		 //nameElm.addEventListener("click", addHandleMessage(name.handle));
+       		 //addPlainMessage();
+        });
+
+        document.body.appendChild(namesContainer);
+    }
+    
+    function clearUserInput() {
+        document.getElementById('inputText').value = '';
+    }
+    
+    function clearFilteredNames() {
+        const filteredNames = document.getElementsByClassName('filtered-name');
+        Array.from(filteredNames).forEach( (filteredName) => {
+            filteredName.remove();
+        });        
+        
+    }
+    
+    function getUserText() {
+        return document.getElementById('inputText').value.trim();
+    }
+    
+    function searchNames() {
+        const userText = getUserText();
+        console.log('Search names ...');
+        console.log(userText);
+        console.log('Search names ...');
+        const firstChar = userText[0] || '';
+        if (firstChar === '@') {
+            console.log('filter names ...');
+            const filteredNames = filterNames(userText);
+            initFilteredNames(filteredNames);
+        } else {
+            console.log('MISSING @ IN USER TEXT');
+        }
+    }
+    
+    // TODO UPDATE THE DEBOUNCE DELAY TO MORE CLOSELY RESEMBLE USER TYPING
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById('inputText').addEventListener(
+            'input',
+            debounce(
+                searchNames,
+                5000
+            )
+        );
+        initDocument();
+    });
+    
+</script>
+
+<style>
+    .filtered-name {
+        border-radius: 5px;
+        height: 23px;
+        line-height: 18px;
+    }
+</style>
